@@ -1,0 +1,15 @@
+{
+  "name": "email-editor",
+  "version": "1.0.0",
+  "description": "Email Editor",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "Umar Waliyullah",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^32.1.2"
+  }
+}
