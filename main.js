@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const fs = require('fs');
 
+app.setName('Email Builder');  // Set your app name
+
 function createWindow() {
   const win = new BrowserWindow({
     fullscreen: true,
@@ -15,8 +17,26 @@ function createWindow() {
 
   win.loadFile('index.html');
 
+  // macOS specific menu adjustments
+  const isMac = process.platform === 'darwin';
+
   // Create a custom menu
-  const menu = Menu.buildFromTemplate([
+  const template = [
+    // macOS application menu (first menu)
+    ...(isMac ? [{
+      label: app.name,
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    }] : []),
     {
       label: 'File',
       submenu: [
@@ -52,12 +72,27 @@ function createWindow() {
           }
         },
         { type: 'separator' },
-        { role: 'quit' }
+        { role: isMac ? 'close' : 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',  // Add the Edit menu
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'pasteAndMatchStyle' },
+        { role: 'delete' },
+        { role: 'selectAll' }
       ]
     }
-  ]);
+  ];
 
   // Set the menu to the application
+  const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
 
